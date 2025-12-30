@@ -105,7 +105,7 @@ async function exchangeCodeForToken(code) {
             localStorage.setItem('user', JSON.stringify(data.user));
             
             // Redirect back to main page after successful login
-            window.location.href = 'index.html';
+            window.location.href = '/';
         } else {
             throw new Error(data.error || 'Authentication failed');
         }
