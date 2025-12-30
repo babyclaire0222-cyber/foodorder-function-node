@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Redirecting...</title>
+    <script>
+        // Handle auth callback
+        if (window.location.search.includes('code=')) {
+            window.location.replace('auth-callback.html' + window.location.search);
+        } else {
+            window.location.replace('index.html');
+        }
+    </script>
+</head>
+<body>
+    <p>Redirecting...</p>
+</body>
+</html>
