@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Debug Authentication</title>
+</head>
+<body>
+    <h1>Authentication Debug</h1>
+    <div id="debug-info"></div>
+    
+    <script>
+        const debugDiv = document.getElementById('debug-info');
+        
+        // Get URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const code = urlParams.get('code');
+        const state = urlParams.get('state');
+        const error = urlParams.get('error');
+        const errorDescription = urlParams.get('error_description');
+        
+        debugDiv.innerHTML += '<h2>URL Parameters:</h2>';
+        debugDiv.innerHTML += '<p>Code: ' + (code || 'None') + '</p>';
+        debugDiv.innerHTML += '<p>State: ' + (state || 'None') + '</p>';
+        debugDiv.innerHTML += '<p>Error: ' + (error || 'None') + '</p>';
+        debugDiv.innerHTML += '<p>Error Description: ' + (errorDescription || 'None') + '</p>';
+        
+        if (code) {
+            debugDiv.innerHTML += '<h2>Attempting Token Exchange...</h2>';
+            
+            // Get code verifier from localStorage
+            const codeVerifier = localStorage.getItem('codeVerifier');
+            debugDiv.innerHTML += '<p>Code Verifier: ' + (codeVerifier || 'None') + '</p>';
+            
+            // Test token exchange
+            fetch('https://foodorder-function-node-gjhnhtapgnd9g0fq.southeastasia-01.azurewebsites.net/api/auth/token', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ 
+                    code,
+                    codeVerifier 
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                debugDiv.innerHTML += '<h2>Token Exchange Response:</h2>';
+                debugDiv.innerHTML += '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
+            })
+            .catch(error => {
+                debugDiv.innerHTML += '<h2>Token Exchange Error:</h2>';
+                debugDiv.innerHTML += '<pre>' + error.toString() + '</pre>';
+            });
+        }
+    </script>
+</body>
+</html>
