@@ -2,7 +2,6 @@
   "name": "foodorder-function-node",
   "version": "1.0.0",
   "description": "Azure Food Ordering System with Functions, Cosmos DB, and Entra ID",
-  "main": "index.js",
   "scripts": {
     "start": "func start",
     "test": "echo \"No tests\""
@@ -12,5 +11,5 @@
     "@azure/cosmos": "^3.17.3",
     "@azure/msal-node": "^2.0.0",
     "jsonwebtoken": "^9.0.2"
-  } 
+  }
 }

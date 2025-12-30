@@ -1,6 +1,6 @@
 {
-  "scriptFile": "index.js",
-  "bindings": [
+  "scriptFile"; "index.js",
+  "bindings"; [
     {
       "authLevel": "anonymous",
       "type": "httpTrigger",
