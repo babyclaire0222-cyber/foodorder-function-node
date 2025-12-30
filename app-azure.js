@@ -21,7 +21,7 @@ async function initAuth() {
 async function login() {
     try {
         // Redirect to Microsoft Entra ID login
-        const authUrl = 'https://login.microsoftonline.com/common/oauth2/v2.0/authorize?' +
+        const authUrl = 'https://login.microsoftonline.com/119b39b3-3572-4fbb-b434-1dd0e649dcaf/oauth2/v2.0/authorize?' +
             'client_id=' + encodeURIComponent('dd47f4ca-42cf-4664-a139-2d179b2bf48a') +
             '&response_type=code' +
             '&redirect_uri=' + encodeURIComponent(window.location.origin + '/auth/callback') +
