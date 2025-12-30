@@ -20,6 +20,11 @@ async function initAuth() {
 
 async function login() {
     try {
+        // Generate PKCE code verifier and challenge
+        const codeVerifier = generateCodeVerifier();
+        const codeChallenge = await generateCodeChallenge(codeVerifier);
+        localStorage.setItem('codeVerifier', codeVerifier);
+        
         // Redirect to Microsoft Entra ID login
         const authUrl = 'https://login.microsoftonline.com/consumers/oauth2/v2.0/authorize?' +
             'client_id=' + encodeURIComponent('02b91625-106e-4b30-89f3-171969d614ea') +
@@ -27,6 +32,8 @@ async function login() {
             '&redirect_uri=' + encodeURIComponent(window.location.origin + '/auth/callback') +
             '&response_mode=query' +
             '&scope=' + encodeURIComponent('openid profile email') +
+            '&code_challenge=' + encodeURIComponent(codeChallenge) +
+            '&code_challenge_method=S256' +
             '&state=' + Math.random().toString(36).substring(7);
             
         window.location.href = authUrl;
@@ -34,6 +41,26 @@ async function login() {
         console.error('Login error:', error);
         alert('Login failed. Please try again.');
     }
+}
+
+// PKCE helper functions
+function generateCodeVerifier() {
+    const array = new Uint8Array(32);
+    crypto.getRandomValues(array);
+    return btoa(String.fromCharCode.apply(null, array))
+        .replace(/\+/g, '-')
+        .replace(/\//g, '_')
+        .replace(/=/g, '');
+}
+
+async function generateCodeChallenge(verifier) {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(verifier);
+    const digest = await crypto.subtle.digest('SHA-256', data);
+    return btoa(String.fromCharCode.apply(null, new Uint8Array(digest)))
+        .replace(/\+/g, '-')
+        .replace(/\//g, '_')
+        .replace(/=/g, '');
 }
 
 function logout() {
@@ -57,12 +84,17 @@ function handleAuthCallback() {
 
 async function exchangeCodeForToken(code) {
     try {
+        const codeVerifier = localStorage.getItem('codeVerifier');
+        
         const response = await fetch('https://foodorder-function-node-gjhnhtapgnd9g0fq.southeastasia-01.azurewebsites.net/api/auth/token', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ code })
+            body: JSON.stringify({ 
+                code,
+                codeVerifier 
+            })
         });
         
         const data = await response.json();
