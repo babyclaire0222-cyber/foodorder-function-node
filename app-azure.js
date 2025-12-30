@@ -22,7 +22,7 @@ async function login() {
     try {
         // Redirect to Microsoft Entra ID login
         const authUrl = 'https://login.microsoftonline.com/consumers/oauth2/v2.0/authorize?' +
-            'client_id=' + encodeURIComponent('dd47f4ca-42cf-4664-a139-2d179b2bf48a') +
+            'client_id=' + encodeURIComponent('02b91625-106e-4b30-89f3-171969d614ea') +
             '&response_type=code' +
             '&redirect_uri=' + encodeURIComponent(window.location.origin + '/auth/callback') +
             '&response_mode=query' +
