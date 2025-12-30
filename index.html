@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Azure Food Express - Microsoft Entra ID Integration</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+
+    <div id="login-section">
+        <h2>Azure Food Express</h2>
+        <p>Please sign in with your Microsoft account to continue</p>
+        
+        <button id="auth-button" class="btn btn-primary">Login with Microsoft</button>
+    </div>
+
+    <div id="app-section" style="display:none;">
+        <h1>Welcome to Food Express</h1>
+        
+        <div class="user-info">
+            <span id="user-email"></span>
+            <button id="logout-btn" class="btn btn-secondary" onclick="logout()">Logout</button>
+        </div>
+
+        <div id="menu">
+            <h3>Our Menu</h3>
+
+            <div class="food-grid">
+
+                <!-- Pizza Card -->
+                <div class="food-card">
+                    <div class="food-image"></div>
+                    <div class="food-info">
+                        <div class="food-name">Pizza</div>
+                        <div class="food-price">$12.99</div>
+                        <button class="order-btn" onclick="placeOrder('Pizza', 12.99)">Order Now</button>
+                    </div>
+                </div>
+
+                <!-- Burger Card -->
+                <div class="food-card">
+                    <div class="food-image"></div>
+                    <div class="food-info">
+                        <div class="food-name">Burger</div>
+                        <div class="food-price">$7.99</div>
+                        <button class="order-btn" onclick="placeOrder('Burger', 7.99)">Order Now</button>
+                    </div>
+                </div>
+
+                <!-- Spaghetti Card -->
+                <div class="food-card">
+                    <div class="food-image"></div>
+                    <div class="food-info">
+                        <div class="food-name">Spaghetti</div>
+                        <div class="food-price">$8.99</div>
+                        <button class="order-btn" onclick="placeOrder('Spaghetti', 8.99)">Order Now</button>
+                    </div>
+                </div>
+
+            </div>
+            <hr>
+            <h3>Your Order Status</h3>
+            <div id="status-display">No active orders.</div>
+            <button class="btn track-btn" onclick="trackOrder()">Refresh Status</button>
+        </div>
+</div>
+<script src="app-azure.js"></script>
+</body>
+</html>
