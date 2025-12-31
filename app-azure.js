@@ -29,7 +29,7 @@ async function login() {
         const authUrl = 'https://login.microsoftonline.com/consumers/oauth2/v2.0/authorize?' +
             'client_id=' + encodeURIComponent('02b91625-106e-4b30-89f3-171969d614ea') +
             '&response_type=code' +
-            '&redirect_uri=' + encodeURIComponent('https://babyclaire0222-cyber.github.io/foodorder-function-node/auth-callback.html') +
+            '&redirect_uri=' + encodeURIComponent('https://babyclaire0222-cyber.github.io/foodorder-function-node/auth/callback') +
             '&response_mode=query' +
             '&scope=' + encodeURIComponent('openid profile email') +
             '&code_challenge=' + encodeURIComponent(codeChallenge) +
