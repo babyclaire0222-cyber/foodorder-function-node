@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Redirect</title>
+</head>
+<body>
+    <h1>Test Redirect Page</h1>
+    <p>This page tests if the redirect from Microsoft is working.</p>
+    <div id="url-info"></div>
+    
+    <script>
+        const urlInfo = document.getElementById('url-info');
+        urlInfo.innerHTML = '<h2>Current URL:</h2>';
+        urlInfo.innerHTML += '<p>' + window.location.href + '</p>';
+        
+        const urlParams = new URLSearchParams(window.location.search);
+        urlInfo.innerHTML += '<h2>URL Parameters:</h2>';
+        
+        for (const [key, value] of urlParams) {
+            urlInfo.innerHTML += '<p><strong>' + key + ':</strong> ' + value + '</p>';
+        }
+        
+        if (urlParams.has('code')) {
+            urlInfo.innerHTML += '<h3>✅ Authentication code received!</h3>';
+        } else {
+            urlInfo.innerHTML += '<h3>❌ No authentication code found</h3>';
+        }
+    </script>
+</body>
+</html>
