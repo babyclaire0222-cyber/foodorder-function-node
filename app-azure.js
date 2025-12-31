@@ -20,8 +20,15 @@ async function initAuth() {
 
 async function login() {
     try {
-        // Redirect to Azure Functions managed authentication
-        const authUrl = 'https://foodorder-function-node-gjhnhtapgnd9g0fq.southeastasia-01.azurewebsites.net/.auth/login/microsoft';
+        // Try direct Microsoft login first
+        const authUrl = 'https://login.microsoftonline.com/common/oauth2/v2.0/authorize?' +
+            'client_id=' + encodeURIComponent('02b91625-106e-4b30-89f3-171969d614ea') +
+            '&response_type=code' +
+            '&redirect_uri=' + encodeURIComponent('https://babyclaire0222-cyber.github.io/foodorder-function-node/') +
+            '&response_mode=query' +
+            '&scope=' + encodeURIComponent('openid profile email') +
+            '&state=' + Math.random().toString(36).substring(7);
+        
         window.location.href = authUrl;
     } catch (error) {
         console.error('Login error:', error);
@@ -58,26 +65,39 @@ function logout() {
 
 async function handleAuthCallback() {
     try {
-        // Azure Functions managed auth provides user info directly
-        const response = await fetch('https://foodorder-function-node-gjhnhtapgnd9g0fq.southeastasia-01.azurewebsites.net/.auth/me');
-        const userInfo = await response.json();
+        // Get authorization code from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const code = urlParams.get('code');
         
-        if (userInfo && userInfo.length > 0) {
-            const user = userInfo[0];
-            authToken = user.access_token;
+        if (!code) {
+            throw new Error('Authorization code not found');
+        }
+        
+        // Exchange authorization code for token via Azure Functions
+        const response = await fetch('https://foodorder-function-node-gjhnhtapgnd9g0fq.southeastasia-01.azurewebsites.net/api/auth/token', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ 
+                code 
+            })
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            authToken = data.token;
             localStorage.setItem('authToken', authToken);
-            localStorage.setItem('user', JSON.stringify({
-                name: user.user_details,
-                email: user.user_id
-            }));
+            localStorage.setItem('user', JSON.stringify(data.user));
             
             // Redirect back to main page after successful login
             window.location.href = '/';
         } else {
-            throw new Error('No user information received');
+            throw new Error(data.error || 'Authentication failed');
         }
     } catch (error) {
-        console.error('Authentication error:', error);
+        console.error('Token exchange error:', error);
         alert('Authentication failed. Please try again.');
         window.location.href = '/';
     }
@@ -198,6 +218,12 @@ async function triggerNotification(orderId, customerEmail) {
 
 // Initialize app
 document.addEventListener('DOMContentLoaded', function() {
+    // Check for auth callback
+    if (window.location.search.includes('code=')) {
+        handleAuthCallback();
+        return;
+    }
+    
     // Check for existing auth
     authToken = localStorage.getItem('authToken');
     
