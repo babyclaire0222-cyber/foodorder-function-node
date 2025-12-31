@@ -14,8 +14,8 @@ module.exports = async function (context, req) {
             return;
         }
         
-        // Microsoft Entra ID token endpoint
-        const tokenEndpoint = 'https://login.microsoftonline.com/common/oauth2/v2.0/token';
+        // Microsoft Entra ID token endpoint - use consumers endpoint for personal accounts
+        const tokenEndpoint = 'https://login.microsoftonline.com/consumers/oauth2/v2.0/token';
         
         // Prepare token request body
         const tokenRequestBody = new URLSearchParams({

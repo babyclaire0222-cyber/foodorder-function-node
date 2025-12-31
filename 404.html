@@ -7,6 +7,8 @@
         // Handle auth callback
         if (window.location.search.includes('code=')) {
             window.location.replace('auth-callback.html' + window.location.search);
+        } else if (window.location.pathname.includes('/auth/callback')) {
+            window.location.replace('auth-callback.html' + window.location.search);
         } else {
             window.location.replace('index.html');
         }
