@@ -14,8 +14,8 @@ module.exports = async function (context, req) {
             return;
         }
         
-        // Microsoft Entra ID token endpoint - use common endpoint for personal accounts
-        const tokenEndpoint = 'https://login.microsoftonline.com/common/oauth2/v2.0/token';
+        // Microsoft Entra ID token endpoint - use tenant-specific endpoint
+        const tokenEndpoint = `https://login.microsoftonline.com/${process.env.AZURE_TENANT_ID}/oauth2/v2.0/token`;
         
         // Prepare token request body
         const tokenRequestBody = new URLSearchParams({
@@ -25,6 +25,11 @@ module.exports = async function (context, req) {
             redirect_uri: process.env.REDIRECT_URI,
             scope: 'openid profile email'
         });
+        
+        // Add client secret for common endpoint
+        if (process.env.AZURE_CLIENT_SECRET) {
+            tokenRequestBody.append('client_secret', process.env.AZURE_CLIENT_SECRET);
+        }
         
         // Add code verifier for PKCE (if provided)
         if (codeVerifier) {

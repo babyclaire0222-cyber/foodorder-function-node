@@ -20,22 +20,8 @@ async function initAuth() {
 
 async function login() {
     try {
-        // Generate PKCE code verifier and challenge
-        const codeVerifier = generateCodeVerifier();
-        const codeChallenge = await generateCodeChallenge(codeVerifier);
-        localStorage.setItem('codeVerifier', codeVerifier);
-        
-        // Redirect to Microsoft Entra ID login
-        const authUrl = 'https://login.microsoftonline.com/common/oauth2/v2.0/authorize?' +
-            'client_id=' + encodeURIComponent('02b91625-106e-4b30-89f3-171969d614ea') +
-            '&response_type=code' +
-            '&redirect_uri=' + encodeURIComponent('https://babyclaire0222-cyber.github.io/foodorder-function-node/test-redirect.html') +
-            '&response_mode=query' +
-            '&scope=' + encodeURIComponent('openid profile email') +
-            '&code_challenge=' + encodeURIComponent(codeChallenge) +
-            '&code_challenge_method=S256' +
-            '&state=' + Math.random().toString(36).substring(7);
-            
+        // Redirect to Azure Functions managed authentication
+        const authUrl = 'https://foodorder-function-node-gjhnhtapgnd9g0fq.southeastasia-01.azurewebsites.net/.auth/login/microsoft';
         window.location.href = authUrl;
     } catch (error) {
         console.error('Login error:', error);
@@ -68,50 +54,32 @@ function logout() {
     localStorage.removeItem('authToken');
     localStorage.removeItem('user');
     showLoginSection();
-    initAuth();
 }
 
-function handleAuthCallback() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const code = urlParams.get('code');
-    const state = urlParams.get('state');
-    
-    if (code) {
-        // Exchange auth code for token
-        exchangeCodeForToken(code);
-    }
-}
-
-async function exchangeCodeForToken(code) {
+async function handleAuthCallback() {
     try {
-        const codeVerifier = localStorage.getItem('codeVerifier');
+        // Azure Functions managed auth provides user info directly
+        const response = await fetch('https://foodorder-function-node-gjhnhtapgnd9g0fq.southeastasia-01.azurewebsites.net/.auth/me');
+        const userInfo = await response.json();
         
-        const response = await fetch('https://foodorder-function-node-gjhnhtapgnd9g0fq.southeastasia-01.azurewebsites.net/api/auth/token', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ 
-                code,
-                codeVerifier 
-            })
-        });
-        
-        const data = await response.json();
-        
-        if (data.success) {
-            authToken = data.token;
+        if (userInfo && userInfo.length > 0) {
+            const user = userInfo[0];
+            authToken = user.access_token;
             localStorage.setItem('authToken', authToken);
-            localStorage.setItem('user', JSON.stringify(data.user));
+            localStorage.setItem('user', JSON.stringify({
+                name: user.user_details,
+                email: user.user_id
+            }));
             
             // Redirect back to main page after successful login
             window.location.href = '/';
         } else {
-            throw new Error(data.error || 'Authentication failed');
+            throw new Error('No user information received');
         }
     } catch (error) {
-        console.error('Token exchange error:', error);
+        console.error('Authentication error:', error);
         alert('Authentication failed. Please try again.');
+        window.location.href = '/';
     }
 }
 
@@ -230,12 +198,6 @@ async function triggerNotification(orderId, customerEmail) {
 
 // Initialize app
 document.addEventListener('DOMContentLoaded', function() {
-    // Check for auth callback
-    if (window.location.search.includes('code=')) {
-        handleAuthCallback();
-        return;
-    }
-    
     // Check for existing auth
     authToken = localStorage.getItem('authToken');
     
