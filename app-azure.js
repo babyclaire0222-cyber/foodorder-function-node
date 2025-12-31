@@ -24,7 +24,7 @@ async function login() {
         const authUrl = 'https://login.microsoftonline.com/common/oauth2/v2.0/authorize?' +
             'client_id=' + encodeURIComponent('02b91625-106e-4b30-89f3-171969d614ea') +
             '&response_type=code' +
-            '&redirect_uri=' + encodeURIComponent('https://babyclaire0222-cyber.github.io/foodorder-function-node/') +
+            '&redirect_uri=' + encodeURIComponent('https://babyclaire0222-cyber.github.io/foodorder-function-node/callback.html') +
             '&response_mode=query' +
             '&scope=' + encodeURIComponent('openid profile email') +
             '&state=' + Math.random().toString(36).substring(7);
