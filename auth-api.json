@@ -1,1 +1,0 @@
-{"scriptFile": "auth-api.js", "bindings": [{"authLevel": "anonymous", "type": "httpTrigger", "direction": "in", "name": "req", "methods": ["post"], "route": "auth/token"}, {"type": "http", "direction": "out", "name": "res"}]}

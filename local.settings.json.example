@@ -1,0 +1,23 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "FUNCTIONS_WORKER_RUNTIME": "node",
+
+    "COSMOS_CONNECTION_STRING": "AccountEndpoint=https://<your-cosmos-account>.documents.azure.com:443/;AccountKey=<key>;",
+    "COSMOS_DATABASE_NAME": "FoodOrderDB",
+    "COSMOS_CONTAINER_NAME": "Orders",
+    "COSMOS_MENU_CONTAINER_NAME": "MenuItems",
+
+    "AZURE_TENANT_ID": "<your-entra-tenant-id>",
+    "AZURE_CLIENT_ID": "<your-app-registration-client-id>",
+    "AZURE_CLIENT_SECRET": "<your-app-registration-client-secret>",
+    "AZURE_API_SCOPE": "api://<your-app-registration-client-id>/access_as_user",
+    "REDIRECT_URI": "http://localhost:7071/auth/callback",
+
+    "LOGIC_APP_NOTIFICATION_URL": "https://<your-logic-app-trigger-url>",
+    "ADMIN_API_KEY": "<generate-a-long-random-string>",
+
+    "ALLOWED_ORIGIN": "http://localhost:3000"
+  }
+}

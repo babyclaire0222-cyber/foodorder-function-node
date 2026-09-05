@@ -1,1 +1,0 @@
-{"scriptFile": "admin-api.js", "bindings": [{"authLevel": "function", "type": "httpTrigger", "direction": "in", "name": "req", "methods": ["get"], "route": "admin"}, {"type": "http", "direction": "out", "name": "res"}]}

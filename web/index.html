@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Food Express - Microsoft Entra ID</title>
+  <link rel="stylesheet" href="style.css">
+  <script>
+    // Replace with your real values, or generate this block at deploy time.
+    window.APP_CONFIG = {
+      clientId: 'c1e68d2c-0d8f-43f4-a6f6-f143b7b09579',
+      tenantId: 'dcc81ff6-5ddf-4408-9322-b1c237fafa66',
+      apiScope: 'api://121b33d9-e77a-419a-bc79-8ab1715371ad/access_as_user',
+      apiBaseUrl: 'http://127.0.0.1:7071/api'
+    };
+  </script>
+</head>
+<body>
+
+<div class="container">
+
+  <div id="login-section">
+    <h2>Food Express</h2>
+    <p>Please sign in with your Microsoft account to continue</p>
+    <button id="auth-button" class="btn btn-primary" onclick="login()">Login with Microsoft</button>
+  </div>
+
+  <div id="app-section" style="display:none;">
+    <h1>Welcome to Food Express</h1>
+
+    <div class="user-info">
+      <span id="user-email"></span>
+      <button class="btn btn-secondary" onclick="logout()">Logout</button>
+    </div>
+
+    <div id="menu">
+      <h3>Our Menu</h3>
+      <div class="food-grid" id="food-grid">
+        <!-- populated from GET /api/menu -->
+      </div>
+      <hr>
+      <h3>Your Order Status</h3>
+      <div id="status-display">No active orders.</div>
+      <button class="btn track-btn" onclick="trackOrder()">Refresh Status</button>
+    </div>
+  </div>
+
+</div>
+<script src="app.js"></script>
+</body>
+</html>
