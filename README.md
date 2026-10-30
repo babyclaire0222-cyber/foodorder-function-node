@@ -3,6 +3,11 @@
 Rebuilt from scratch on the Azure Functions v4 programming model. What changed
 from the original app, and why, is in `CHANGES.md`.
 
+**Architecture pack (work in progress):** [Architecture](docs/ARCHITECTURE.md) ·
+[Decision records](docs/adr/README.md) · [Cost model](docs/COST.md) ·
+[Well-Architected review](docs/WELL-ARCHITECTED.md) · [Disaster recovery](docs/DR.md) ·
+[AWS mapping](docs/AWS-MAPPING.md)
+
 ## Architecture
 
 ```
@@ -21,10 +26,10 @@ API surface (all under `/api`):
 | PATCH  | `/orders/{orderId}/acknowledge` | Bearer token (owner) | customer confirms receipt once "ready" |
 | POST   | `/auth/token`                | none (uses PKCE)        | exchange Entra ID auth code           |
 | GET    | `/stats/admin`               | `x-admin-key`           | order counts / system stats           |
-| GET    | `/stall/orders`              | Bearer token + `StallStaff` role | list all orders (staff dashboard) |
-| PATCH  | `/stall/orders/{orderId}/status` | Bearer token + `StallStaff` role | advance an order's status |
-| POST   | `/stall/menu`                | Bearer token + `StallStaff` role | create or update a menu item |
-| DELETE | `/stall/menu/{itemId}`       | Bearer token + `StallStaff` role | remove a menu item |
+| GET    | `/stall/orders`              | Bearer token + `StallStaff` role | list all orders (staff dashboard) (planned) |
+| PATCH  | `/stall/orders/{orderId}/status` | Bearer token + `StallStaff` role | advance an order's status (planned) |
+| POST   | `/stall/menu`                | Bearer token + `StallStaff` role | create or update a menu item (planned) |
+| DELETE | `/stall/menu/{itemId}`       | Bearer token + `StallStaff` role | remove a menu item (planned) |
 
 Notifications (Logic App) are fired **by the server** right after an order is
 written — there's no longer a client-callable `/api/notify` a user could
